@@ -1,0 +1,61 @@
+import tkinter as tk
+
+def check_answer(answer):
+    global low, high, guess, tries
+    if answer == 'h':
+        high = guess - 1
+    elif answer == 'l':
+        low = guess + 1
+    elif answer == 'c':
+        result_label.config(text="Awesome, I got it in " + str(tries) + " tries or less!")
+        yes_button.config(state="disabled")
+        no_button.config(state="disabled")
+        correct_button.config(state="disabled")
+        return
+    else:
+        result_label.config(text="Sorry, I did not understand your input.")
+    tries += 1
+    if tries == 7:
+        result_label.config(text="Sorry, I couldn't guess your number in 7 tries or less.")
+        yes_button.config(state="disabled")
+        no_button.config(state="disabled")
+        correct_button.config(state="disabled")
+    else:
+        guess = (low + high) // 2
+        guess_label.config(text="Is your number " + str(guess) + "?")
+
+def start_game():
+    global low, high, guess, tries
+    low = 1
+    high = 100
+    guess = (low + high) // 2
+    tries = 0
+    guess_label.config(text="Is your number " + str(guess) + "?")
+    result_label.config(text="")
+    yes_button.config(state="normal")
+    no_button.config(state="normal")
+    correct_button.config(state="normal")
+
+root = tk.Tk()
+root.title("Number Guessing Game")
+root.geometry("400x200")
+
+guess_label = tk.Label(root, text="", font=("Arial", 16))
+guess_label.pack()
+
+result_label = tk.Label(root, text="", font=("Arial", 16))
+result_label.pack()
+
+yes_button = tk.Button(root, text="Too high", font=("Arial", 16), command=lambda: check_answer('h'), state="disabled")
+yes_button.pack(pady=10)
+
+no_button = tk.Button(root, text="Too low", font=("Arial", 16), command=lambda: check_answer('l'), state="disabled")
+no_button.pack(pady=10)
+
+correct_button = tk.Button(root, text="This is my number", font=("Arial", 16), command=lambda: check_answer('c'), state="disabled")
+correct_button.pack(pady=10)
+
+start_button = tk.Button(root, text="Start", font=("Arial", 16), command=start_game)
+start_button.pack(pady=10)
+
+root.mainloop()
